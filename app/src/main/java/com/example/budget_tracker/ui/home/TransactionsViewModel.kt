@@ -14,12 +14,16 @@ class TransactionsViewModel : ViewModel() {
 
     private val _transactions = MutableLiveData<List<TransactionResponse>>()
     val transactions: LiveData<List<TransactionResponse>> get() = _transactions
+    val loggedInUser = UserManager.getInstance().getLoggedInUser()
+
+    var id = loggedInUser?.id ?: ""
 
     fun getAllTransactions() {
         viewModelScope.launch {
             try {
-                val response = transactionAPI.getAllTransactions()
+                val response = transactionAPI.getTransactionById(id)
                 val responseBody = response.body()
+                Log.d("TransactionData", "userid $id")
                 Log.d("TransactionData", responseBody.toString()) // Log the response body
                 if (response.isSuccessful) {
                     val transactionList = responseBody ?: emptyList()

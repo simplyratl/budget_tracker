@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,8 +36,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val loggedInUser = UserManager.getInstance().getLoggedInUser()
-
+        val noResultsText = root.findViewById<TextView>(R.id.no_results)
 
         val recyclerView: RecyclerView = root.findViewById(R.id.transactionsRecyclerView)
         transactionAdapter = TransactionAdapter(emptyList()) // Pass an empty list initially
@@ -50,6 +50,13 @@ class HomeFragment : Fragment() {
         transactionsViewModel.transactions.observe(viewLifecycleOwner) { transactionResponse ->
             if (transactionResponse != null) {
                 transactionAdapter.transactionList = transactionResponse
+                if (transactionResponse.isNotEmpty()) {
+                    noResultsText.visibility = View.GONE // Hide the "No transactions available" text
+                } else {
+                    noResultsText.visibility = View.VISIBLE // Show the "No transactions available" text
+                }
+            } else {
+                noResultsText.visibility = View.VISIBLE // Show the "No transactions available" text if the list is null
             }
             transactionAdapter.notifyDataSetChanged()
         }

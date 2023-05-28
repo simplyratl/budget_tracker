@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.example.budget_tracker.MainActivity
 import com.example.budget_tracker.R
@@ -26,6 +27,12 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         val loginButton = findViewById<Button>(R.id.login_button)
+        val createAccountButton = findViewById<TextView>(R.id.create_account)
+
+        createAccountButton.setOnClickListener{
+            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+            startActivity(intent)
+        }
 
         loginButton.setOnClickListener{
             val emailEditText = findViewById<EditText>(R.id.emailInput)
