@@ -1,4 +1,4 @@
-package com.example.budget_tracker.ui.home
+package com.example.budget_tracker.ui.settings.add_budget
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,49 +11,47 @@ import androidx.lifecycle.lifecycleScope
 import com.example.budget_tracker.MainActivity
 import com.example.budget_tracker.R
 import com.example.budget_tracker.api.models.RetrofitInstance
+import com.example.budget_tracker.api.models.models.AddBudgetUserRequest
 import com.example.budget_tracker.api.models.models.AddTransationRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AddTransactionActivity : AppCompatActivity() {
+class AddBudgetActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
-        setContentView(R.layout.activity_add_transaction)
+        setContentView(R.layout.activity_add_budget)
 
         val userManager = UserManager.getInstance()
         val loggedInUser = userManager.getLoggedInUser()
 
         val backButton = findViewById<LinearLayout>(R.id.back_button)
-        val submitButton = findViewById<Button>(R.id.add_transaction_button)
+        val submitButton = findViewById<Button>(R.id.add_budget_button)
 
         backButton.setOnClickListener{
-            val intent = Intent(this@AddTransactionActivity, MainActivity::class.java)
+            val intent = Intent(this@AddBudgetActivity, MainActivity::class.java)
             startActivity(intent)
         }
 
         submitButton.setOnClickListener{
 
-            val nameEditText = findViewById<EditText>(R.id.transaction_name_input)
-            val amountEditText = findViewById<EditText>(R.id.transaction_amount_input)
+            val amountEditText = findViewById<EditText>(R.id.budget_amount_input)
 
-            val title = nameEditText.text.toString()
             val amount = amountEditText.text.toString().toDouble()
-            val userId = loggedInUser?.id.toString()
+            val id = loggedInUser?.id.toString()
 
-            if(title.isEmpty() || amount.isNaN() || userId.isEmpty()){
+            if(amount.isNaN() || id.isEmpty()){
                 return@setOnClickListener
             }
 
-            val request = AddTransationRequest(amount, userId, title)
-
+            val request = AddBudgetUserRequest(id, amount)
 
             lifecycleScope.launch {
                 try {
                     // Call the suspend function inside the coroutine
                     val response = withContext(Dispatchers.IO) {
-                        RetrofitInstance.api.createTransaction(request)
+                        RetrofitInstance.api.addBudgetToUser(request)
                     }
 
                     if (response.isSuccessful) {
@@ -61,11 +59,11 @@ class AddTransactionActivity : AppCompatActivity() {
                         val addedTransaction = response.body()
                         if (addedTransaction != null) {
                             if (loggedInUser != null) {
-                                userManager.updateBudget(addedTransaction.amount)
+                                userManager.addToBudget(amount)
                             }
                         }
 
-                        val intent = Intent(this@AddTransactionActivity, MainActivity::class.java)
+                        val intent = Intent(this@AddBudgetActivity, MainActivity::class.java)
                         startActivity(intent)
                     } else {
                         // Login failed
@@ -81,6 +79,6 @@ class AddTransactionActivity : AppCompatActivity() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(this@AddTransactionActivity, message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@AddBudgetActivity, message, Toast.LENGTH_SHORT).show()
     }
 }

@@ -1,5 +1,6 @@
 package com.example.budget_tracker.api.models.repository
 
+import com.example.budget_tracker.api.models.models.AddBudgetUserRequest
 import com.example.budget_tracker.api.models.models.AddTransationRequest
 import com.example.budget_tracker.api.models.models.LoginRequest
 import com.example.budget_tracker.api.models.models.TransactionResponse
@@ -8,6 +9,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface TransactionAPI {
 
@@ -19,4 +21,7 @@ interface TransactionAPI {
 
     @POST("transactions/")
     suspend fun createTransaction(@Body request: AddTransationRequest): Response<TransactionResponse>
+
+    @POST("users/add-budget")
+    suspend fun addBudgetToUser(@Body request: AddBudgetUserRequest): Response<UserResponse>
 }

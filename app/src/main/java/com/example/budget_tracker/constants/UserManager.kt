@@ -16,7 +16,26 @@ class UserManager private constructor() {
         loggedInUser?.let { user ->
             val updatedBudget = user.budget - amount
             user.budget = updatedBudget
+            user.spendings = user.spendings + amount
         }
+    }
+
+    fun addToBudget(amount: Double) {
+        loggedInUser?.let { user ->
+            val updatedBudget = user.budget + amount
+            user.budget = updatedBudget
+            user.earnings = user.earnings + amount
+        }
+    }
+
+    fun setBudget(budget:Double){
+        loggedInUser?.let { user ->
+            user.budget = budget
+        }
+    }
+
+    fun logout(){
+        loggedInUser = null
     }
 
     companion object {

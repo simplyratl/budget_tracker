@@ -28,7 +28,7 @@ class TransactionAdapter(var transactionList: List<TransactionResponse>) :
         val formattedDate = convertDate(transaction.createdAt)
 
         holder.transactionNameTextView.text = transaction.title
-        holder.transactionAmountTextView.text = transaction.amount.toString()
+        holder.transactionAmountTextView.text = transaction.amount.toString() + "€"
         holder.transactionDateTextView.text = formattedDate
 
         val backgroundDrawable = if (transaction.valid) {

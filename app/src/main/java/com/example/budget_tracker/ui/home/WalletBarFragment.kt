@@ -1,6 +1,7 @@
 package com.example.budget_tracker.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,9 @@ class WalletBarFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_wallet_bar, container, false)
         val budgetUserText: TextView = view.findViewById(R.id.budget_user_text)
         val budgetText:TextView = view.findViewById(R.id.text_budget)
+        val monthlyIncome = view.findViewById<TextView>(R.id.home_budget_monthly_status_added)
+        val monthlySpendings = view.findViewById<TextView>(R.id.home_budget_monthly_status_spent)
+
 
         val loggedInUser = UserManager.getInstance().getLoggedInUser()
 
@@ -21,8 +25,14 @@ class WalletBarFragment : Fragment() {
             val userName = loggedInUser.name
             val budget = loggedInUser.budget
 
+            val earnings = loggedInUser.earnings
+            val spendings = loggedInUser.spendings
+
             budgetUserText.text = "Welcome, $userName!"
             budgetText.text = "$budget€"
+
+            monthlyIncome.text = earnings.toString() + "€"
+            monthlySpendings.text = spendings.toString() + "€"
         } else {
             budgetUserText.text = "My Budget"
         }
