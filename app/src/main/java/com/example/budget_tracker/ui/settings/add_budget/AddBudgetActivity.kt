@@ -45,6 +45,11 @@ class AddBudgetActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            if(amount >= 1000000){
+                showToast("U can't add more than 1 million of income")
+                return@setOnClickListener
+            }
+
             val request = AddBudgetUserRequest(id, amount)
 
             lifecycleScope.launch {

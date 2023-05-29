@@ -1,18 +1,25 @@
 package com.example.budget_tracker.adapters
 
+import android.content.Intent
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.graphics.Color
+import android.util.Log
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.budget_tracker.R
+import com.example.budget_tracker.api.models.models.Item
 import com.example.budget_tracker.api.models.models.TransactionResponse
+import com.example.budget_tracker.ui.transaction_info.TransactionInfoActivity
+import com.example.budget_tracker.utils.convertDate
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.TimeZone
+import kotlin.math.log
 
 class TransactionAdapter(var transactionList: List<TransactionResponse>) :
     RecyclerView.Adapter<TransactionAdapter.ViewHolder>() {
@@ -26,20 +33,28 @@ class TransactionAdapter(var transactionList: List<TransactionResponse>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val transaction = transactionList[position]
         val formattedDate = convertDate(transaction.createdAt)
+        val decimalFormat = DecimalFormat("#0.00")
+
+        Log.d("TRANSACTION ONE", transaction.toString())
 
         holder.transactionNameTextView.text = transaction.title
-        holder.transactionAmountTextView.text = transaction.amount.toString() + "€"
+        holder.transactionAmountTextView.text = decimalFormat.format(transaction.amount).toString() + "€"
         holder.transactionDateTextView.text = formattedDate
 
         val backgroundDrawable = if (transaction.valid) {
-            R.drawable.transactions_background
+            if(transaction.addedIncome == true) {
+                Log.d("TRANSACTION ONE", "PROSLO")
+                R.drawable.transactions_background_added_income
+            } else{
+                R.drawable.transactions_background
+            }
         } else {
             R.drawable.transactions_background_disabled
         }
 
+
         holder.cardView.apply {
             background = ContextCompat.getDrawable(context, backgroundDrawable)
-            isEnabled = transaction.valid
         }
     }
 
@@ -48,21 +63,21 @@ class TransactionAdapter(var transactionList: List<TransactionResponse>) :
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val cardView: CardView = itemView.findViewById(R.id.transactionCardView)
 
+        init {
+            itemView.setOnClickListener {
+                val context = itemView.context
+                var transaction = transactionList[adapterPosition]
+                val intent = Intent(context, TransactionInfoActivity::class.java)
+                intent.putExtra("transaction", transaction)
+                context.startActivity(intent)
+            }
+        }
+
+        val cardView: CardView = itemView.findViewById(R.id.transactionCardView)
 
         val transactionNameTextView: TextView = itemView.findViewById(R.id.transactionNameTextView)
         val transactionAmountTextView: TextView = itemView.findViewById(R.id.transactionAmountTextView)
         val transactionDateTextView: TextView = itemView.findViewById(R.id.transactionDateTextView)
-    }
-
-    private fun convertDate(createdAt: String): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        val date = dateFormat.parse(createdAt)
-
-        val currentTimeMillis = System.currentTimeMillis()
-        val dateMillis = date?.time ?: 0
-
-        return DateUtils.getRelativeTimeSpanString(dateMillis, currentTimeMillis, DateUtils.MINUTE_IN_MILLIS).toString()
     }
 }

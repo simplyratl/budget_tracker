@@ -17,6 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import android.widget.Toast
+import com.example.budget_tracker.utils.errorNotification
+import com.example.budget_tracker.utils.successNotification
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -43,15 +45,15 @@ class LoginActivity : AppCompatActivity() {
 
             val loginRequest = LoginRequest(email, password)
 
-            Log.d("LOGIN", email)
-            Log.d("LOGIN", password)
-
             if(email.isEmpty() || password.isEmpty()){
                 return@setOnClickListener
             }
 
             lifecycleScope.launch {
                 try {
+
+                    loginButton.isEnabled = false
+
                     // Call the suspend function inside the coroutine
                     val response = withContext(Dispatchers.IO) {
                         RetrofitInstance.api.loginUser(loginRequest)
@@ -60,24 +62,23 @@ class LoginActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         // Login successful
                         val loggedInUser = response.body()
+
+                        Log.d("LOGGING", loggedInUser.toString())
+
                         if (loggedInUser != null) {
                             UserManager.getInstance().setLoggedInUser(loggedInUser)
                         }
 
+                        successNotification(this@LoginActivity, "Successful login")
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
                     } else {
-                        // Login failed
-                        // Handle the error condition according to your app's logic
-                        if (response.code() == 404) {
-                            // User not found
-                            showToast("No user found")
-                        } else if(response.code() == 403){
-                            showToast("Incorrect credentials")
-                        }
+                        errorNotification(this@LoginActivity, response.message())
                     }
                 } catch (e: Exception) {
                     // Handle any exceptions or errors
+                } finally {
+                    loginButton.isEnabled = true
                 }
             }
 

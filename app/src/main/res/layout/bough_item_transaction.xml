@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -6,10 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="70dp"
     app:cardCornerRadius="8dp"
-    android:foreground="?android:attr/selectableItemBackground"
     android:clickable="true"
-    android:focusable="false"
-    android:layout_marginBottom="8dp">
+    android:focusable="false">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,29 +21,21 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/transactionNameTextView"
+                android:id="@+id/item_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:textSize="20sp"
-                android:text="Transaction Name" />
-
-            <TextView
-                android:id="@+id/transactionDateTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:textSize="14sp"
-                android:textColor="@color/gray"
-                android:text="Date" />
+                android:text="Item Name" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/transactionAmountTextView"
+            android:id="@+id/item_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end"
             android:textSize="20sp"
+            android:layout_marginLeft="4dp"
             android:text="Transaction Amount" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

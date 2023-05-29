@@ -61,7 +61,6 @@ class HomeFragment : Fragment() {
             transactionAdapter.notifyDataSetChanged()
         }
 
-
         return root
     }
 

@@ -4,6 +4,8 @@ import com.example.budget_tracker.api.models.models.AddBudgetUserRequest
 import com.example.budget_tracker.api.models.models.AddTransationRequest
 import com.example.budget_tracker.api.models.models.LoginRequest
 import com.example.budget_tracker.api.models.models.RegisterRequest
+import com.example.budget_tracker.api.models.models.ScanQRCodeRequest
+import com.example.budget_tracker.api.models.models.ScannedQRCodeResponse
 import com.example.budget_tracker.api.models.models.TransactionResponse
 import com.example.budget_tracker.api.models.models.UserResponse
 import retrofit2.Response
@@ -14,7 +16,7 @@ import retrofit2.http.Path
 
 interface TransactionAPI {
 
-    @GET("transactions/by_user/{id}")
+    @GET("transactions/user/{id}")
     suspend fun getTransactionById(@Path("id") id: String): Response<List<TransactionResponse>>
 
     @POST("users/login/")
@@ -28,4 +30,7 @@ interface TransactionAPI {
 
     @POST("users/add-budget")
     suspend fun addBudgetToUser(@Body request: AddBudgetUserRequest): Response<UserResponse>
+
+    @POST("scanning/scan")
+    suspend fun scanQRCode(@Body request: ScanQRCodeRequest): Response<ScannedQRCodeResponse>
 }

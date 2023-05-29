@@ -45,6 +45,8 @@ class RegisterActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
+                    registerButton.isEnabled = false
+
                     // Call the suspend function inside the coroutine
                     val response = withContext(Dispatchers.IO) {
                         RetrofitInstance.api.registerUser(request)
@@ -61,6 +63,8 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 } catch (e: Exception) {
                     // Handle any exceptions or errors
+                } finally {
+                    registerButton.isEnabled = true
                 }
             }
         }

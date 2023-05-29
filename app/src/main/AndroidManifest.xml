@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +21,20 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.transaction_info.TransactionInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.scanner.ScannerActivity"
+            android:exported="true">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity
             android:name=".ui.auth.login.ui.RegisterActivity"
             android:exported="false" />
         <activity
@@ -24,11 +43,6 @@
         <activity
             android:name=".ui.home.AddTransactionActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.home.add_transaction.AddTransactionActivity"
-            android:exported="false"
-            android:label="@string/title_activity_add_transaction"
-            android:theme="@style/Theme.Budget_tracker" />
         <activity
             android:name=".ui.auth.login.ui.LoginActivity"
             android:exported="true">

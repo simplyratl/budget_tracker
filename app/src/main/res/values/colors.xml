@@ -6,7 +6,7 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="gray">#757575</color>
+    <color name="gray">#B3B3B3</color>
     <color name="white">#FFFFFFFF</color>
     <color name="background">#000</color>
     <color name="text_color">#fff</color>
@@ -14,4 +14,5 @@
     <color name="secondary_color">#55B9FF</color>
 
     <color name="cardview_background_disabled">#A32929</color>
+    <color name="cardview_background_added_income">#18492D</color>
 </resources>

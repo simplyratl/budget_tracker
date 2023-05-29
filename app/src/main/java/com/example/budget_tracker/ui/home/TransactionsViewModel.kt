@@ -22,6 +22,7 @@ class TransactionsViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = transactionAPI.getTransactionById(id)
+
                 val responseBody = response.body()
                 Log.d("TransactionData", "userid $id")
                 Log.d("TransactionData", responseBody.toString()) // Log the response body
