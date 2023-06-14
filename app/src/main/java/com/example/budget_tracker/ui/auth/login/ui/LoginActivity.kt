@@ -1,24 +1,23 @@
 package com.example.budget_tracker.ui.auth.login.ui
 
+import UserManager
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.budget_tracker.MainActivity
 import com.example.budget_tracker.R
 import com.example.budget_tracker.api.models.RetrofitInstance
 import com.example.budget_tracker.api.models.models.LoginRequest
 import com.example.budget_tracker.databinding.ActivityLoginBinding
+import com.example.budget_tracker.utils.errorNotification
+import com.example.budget_tracker.utils.successNotification
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import android.widget.Toast
-import com.example.budget_tracker.utils.errorNotification
-import com.example.budget_tracker.utils.successNotification
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -31,12 +30,12 @@ class LoginActivity : AppCompatActivity() {
         val loginButton = findViewById<Button>(R.id.login_button)
         val createAccountButton = findViewById<TextView>(R.id.create_account)
 
-        createAccountButton.setOnClickListener{
+        createAccountButton.setOnClickListener {
             val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)
         }
 
-        loginButton.setOnClickListener{
+        loginButton.setOnClickListener {
             val emailEditText = findViewById<EditText>(R.id.emailInput)
             val passwordEditText = findViewById<EditText>(R.id.passwordInput)
 
@@ -45,7 +44,8 @@ class LoginActivity : AppCompatActivity() {
 
             val loginRequest = LoginRequest(email, password)
 
-            if(email.isEmpty() || password.isEmpty()){
+            if (email.isEmpty() || password.isEmpty()) {
+                errorNotification(this@LoginActivity, "Please fill in all inputs")
                 return@setOnClickListener
             }
 
@@ -63,8 +63,6 @@ class LoginActivity : AppCompatActivity() {
                         // Login successful
                         val loggedInUser = response.body()
 
-                        Log.d("LOGGING", loggedInUser.toString())
-
                         if (loggedInUser != null) {
                             UserManager.getInstance().setLoggedInUser(loggedInUser)
                         }
@@ -76,16 +74,12 @@ class LoginActivity : AppCompatActivity() {
                         errorNotification(this@LoginActivity, response.message())
                     }
                 } catch (e: Exception) {
+                    e.message?.let { it1 -> errorNotification(this@LoginActivity, it1) }
                     // Handle any exceptions or errors
                 } finally {
                     loginButton.isEnabled = true
                 }
             }
-
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this@LoginActivity, message, Toast.LENGTH_SHORT).show()
     }
 }

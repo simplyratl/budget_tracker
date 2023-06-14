@@ -1,5 +1,6 @@
 package com.example.budget_tracker.adapters
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.text.format.DateUtils
 import android.view.LayoutInflater
@@ -65,12 +66,30 @@ class TransactionAdapter(var transactionList: List<TransactionResponse>) :
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         init {
+            val context = itemView.context
             itemView.setOnClickListener {
-                val context = itemView.context
                 var transaction = transactionList[adapterPosition]
                 val intent = Intent(context, TransactionInfoActivity::class.java)
                 intent.putExtra("transaction", transaction)
                 context.startActivity(intent)
+            }
+
+            itemView.setOnLongClickListener{
+                val alertDialogBuilder = AlertDialog.Builder(context)
+                alertDialogBuilder.setMessage("Are you sure you want to delete this transaction?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        // User clicked the "Yes" button, perform the delete operation here
+                        // Add your delete logic here
+                    }
+                    .setNegativeButton("No") { dialog, _ ->
+                        // User clicked the "No" button, dismiss the dialog
+                        dialog.dismiss()
+                    }
+
+                val alertDialog = alertDialogBuilder.create()
+                alertDialog.show()
+
+                true
             }
         }
 

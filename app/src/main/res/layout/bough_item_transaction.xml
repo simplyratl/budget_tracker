@@ -6,6 +6,7 @@
     android:layout_height="70dp"
     app:cardCornerRadius="8dp"
     android:clickable="true"
+    android:layout_marginBottom="8dp"
     android:focusable="false">
 
     <LinearLayout

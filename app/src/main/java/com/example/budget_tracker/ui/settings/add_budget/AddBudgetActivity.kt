@@ -13,6 +13,7 @@ import com.example.budget_tracker.R
 import com.example.budget_tracker.api.models.RetrofitInstance
 import com.example.budget_tracker.api.models.models.AddBudgetUserRequest
 import com.example.budget_tracker.api.models.models.AddTransationRequest
+import com.example.budget_tracker.utils.errorNotification
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -45,9 +46,16 @@ class AddBudgetActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if(amount >= 1000000){
-                showToast("U can't add more than 1 million of income")
+            if(amount >= 10000){
+                errorNotification(this@AddBudgetActivity, "You can't add more than 10 thousand of income")
                 return@setOnClickListener
+            }
+
+            if (loggedInUser != null) {
+                if(amount + loggedInUser.budget > 10000){
+                    errorNotification(this@AddBudgetActivity, "You can't add more than 10 thousand of income in total")
+                    return@setOnClickListener
+                }
             }
 
             val request = AddBudgetUserRequest(id, amount)

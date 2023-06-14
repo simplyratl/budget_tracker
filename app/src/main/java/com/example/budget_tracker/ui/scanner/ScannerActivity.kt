@@ -115,10 +115,9 @@ class ScannerActivity : AppCompatActivity() {
 
                             if(responseTransaction.isSuccessful){
                                 val addedTransaction = responseTransaction.body()
-                                Log.d("SCANNING", addedTransaction.toString())
 
                                 if (addedTransaction != null) {
-                                    if (loggedInUser != null) {
+                                    if (loggedInUser != null && addedTransaction.amount < loggedInUser.budget) {
                                         userManager.updateBudget(addedTransaction.amount)
                                     }
                                 }
@@ -130,11 +129,11 @@ class ScannerActivity : AppCompatActivity() {
                             }
 
                         } else {
-                            errorNotification(this@ScannerActivity, response.message())
                             // Handle the error condition according to your app's logic
+                            errorNotification(this@ScannerActivity, response.message())
                         }
                     } catch (e: Exception) {
-                        errorNotification(this@ScannerActivity, e.message as String)
+                        errorNotification(this@ScannerActivity, "Invalid URL or the check is not fiscalized")
                     } finally {
                         scanningLoading = false
                         scannerLoadingLayout.visibility = View.GONE
