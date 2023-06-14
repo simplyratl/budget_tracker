@@ -11,7 +11,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.budget_tracker.databinding.FragmentStatisticsBinding
 import com.example.budget_tracker.ui.statistics.tabs.MonthTabFragment
 import com.example.budget_tracker.ui.statistics.tabs.WeekTabFragment
-import com.example.budget_tracker.ui.statistics.tabs.YearTabFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -45,8 +44,6 @@ class StatisticsFragment : Fragment() {
 
         adapter.addFragment(WeekTabFragment(), "Week")
         adapter.addFragment(MonthTabFragment(), "Month")
-        adapter.addFragment(YearTabFragment(), "Year")
-
 
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
             tab.text = when (position) {
