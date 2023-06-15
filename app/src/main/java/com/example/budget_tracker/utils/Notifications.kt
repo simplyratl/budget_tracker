@@ -5,18 +5,18 @@ import android.widget.Toast
 import es.dmoral.toasty.Toasty
 
 
-fun errorNotification(context:Context, message:String) {
+fun errorNotification(context: Context, message: String) {
     return Toasty.error(context, message, Toast.LENGTH_SHORT, true).show()
 }
 
-fun successNotification(context:Context, message:String) {
+fun successNotification(context: Context, message: String) {
     return Toasty.success(context, message, Toast.LENGTH_SHORT, true).show()
 }
 
-fun infoNotification(context:Context, message:String) {
+fun infoNotification(context: Context, message: String) {
     return Toasty.info(context, message, Toast.LENGTH_SHORT, true).show()
 }
 
-fun warningNotification(context:Context, message:String) {
+fun warningNotification(context: Context, message: String) {
     return Toasty.warning(context, message, Toast.LENGTH_SHORT, true).show()
 }

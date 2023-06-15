@@ -19,10 +19,10 @@ interface TransactionAPI {
     @GET("transactions/user/{id}")
     suspend fun getTransactionById(@Path("id") id: String): Response<List<TransactionResponse>>
 
-    @GET("transactions/transactions/statistics/weekly/{id}")
+    @GET("transactions/statistics/weekly/{id}")
     suspend fun getStatisticsWeek(@Path("id") id: String): Response<List<Double>>
 
-    @GET("transactions/transactions/statistics/month/{id}")
+    @GET("transactions/statistics/month/{id}")
     suspend fun getStatisticsMonth(@Path("id") id: String): Response<List<Double>>
 
     @POST("users/login/")

@@ -1,18 +1,18 @@
 package com.example.budget_tracker.ui.settings.add_budget
 
+import UserManager
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.budget_tracker.MainActivity
 import com.example.budget_tracker.R
 import com.example.budget_tracker.api.models.RetrofitInstance
 import com.example.budget_tracker.api.models.models.AddBudgetUserRequest
-import com.example.budget_tracker.api.models.models.AddTransationRequest
 import com.example.budget_tracker.utils.errorNotification
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,30 +30,36 @@ class AddBudgetActivity : AppCompatActivity() {
         val backButton = findViewById<LinearLayout>(R.id.back_button)
         val submitButton = findViewById<Button>(R.id.add_budget_button)
 
-        backButton.setOnClickListener{
+        backButton.setOnClickListener {
             val intent = Intent(this@AddBudgetActivity, MainActivity::class.java)
             startActivity(intent)
         }
 
-        submitButton.setOnClickListener{
+        submitButton.setOnClickListener {
 
             val amountEditText = findViewById<EditText>(R.id.budget_amount_input)
 
             val amount = amountEditText.text.toString().toDouble()
             val id = loggedInUser?.id.toString()
 
-            if(amount.isNaN() || id.isEmpty()){
+            if (amount.isNaN() || id.isEmpty()) {
                 return@setOnClickListener
             }
 
-            if(amount >= 10000){
-                errorNotification(this@AddBudgetActivity, "You can't add more than 10 thousand of income")
+            if (amount >= 10000) {
+                errorNotification(
+                    this@AddBudgetActivity,
+                    "You can't add more than 10 thousand of income"
+                )
                 return@setOnClickListener
             }
 
             if (loggedInUser != null) {
-                if(amount + loggedInUser.budget > 10000){
-                    errorNotification(this@AddBudgetActivity, "You can't add more than 10 thousand of income in total")
+                if (amount + loggedInUser.budget > 10000) {
+                    errorNotification(
+                        this@AddBudgetActivity,
+                        "You can't add more than 10 thousand of income in total"
+                    )
                     return@setOnClickListener
                 }
             }

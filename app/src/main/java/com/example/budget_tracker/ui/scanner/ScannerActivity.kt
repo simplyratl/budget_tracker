@@ -1,14 +1,15 @@
 package com.example.budget_tracker.ui.scanner
 
+import UserManager
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -21,10 +22,8 @@ import com.budiyev.android.codescanner.ScanMode
 import com.example.budget_tracker.MainActivity
 import com.example.budget_tracker.R
 import com.example.budget_tracker.api.models.RetrofitInstance
-import com.example.budget_tracker.api.models.models.AddBudgetUserRequest
 import com.example.budget_tracker.api.models.models.AddTransationRequest
 import com.example.budget_tracker.api.models.models.ScanQRCodeRequest
-import com.example.budget_tracker.ui.home.AddTransactionActivity
 import com.example.budget_tracker.utils.errorNotification
 import com.example.budget_tracker.utils.successNotification
 import kotlinx.coroutines.Dispatchers
@@ -50,13 +49,16 @@ class ScannerActivity : AppCompatActivity() {
         var backButton = findViewById<LinearLayout>(R.id.back_button)
         scannerLoadingLayout = findViewById(R.id.scanner_loading)
 
-
-        backButton.setOnClickListener{
+        backButton.setOnClickListener {
             var intent = Intent(this@ScannerActivity, MainActivity::class.java)
             startActivity(intent)
         }
 
-        if (ContextCompat.checkSelfPermission(this, cameraPermission) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                cameraPermission
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat.requestPermissions(this, arrayOf(cameraPermission), requestCode)
         } else {
             isPermissionGranted = true
@@ -100,20 +102,23 @@ class ScannerActivity : AppCompatActivity() {
 
                             Log.d("SCANNING", data.toString())
 
-                            if(data === null) return@launch
+                            if (data === null) return@launch
 
                             val userId = loggedInUser?.id.toString()
 
-                            val requestTransaction = AddTransationRequest(data.amount, userId , data.title, data.items, data.adress)
+                            val requestTransaction = AddTransationRequest(
+                                data.amount,
+                                userId,
+                                data.title,
+                                data.items,
+                                data.adress
+                            )
 
                             val responseTransaction = withContext(Dispatchers.IO) {
                                 RetrofitInstance.api.createTransaction(requestTransaction)
                             }
 
-                            Log.d("SCANNING", responseTransaction.toString())
-
-
-                            if(responseTransaction.isSuccessful){
+                            if (responseTransaction.isSuccessful) {
                                 val addedTransaction = responseTransaction.body()
 
                                 if (addedTransaction != null) {
@@ -121,11 +126,17 @@ class ScannerActivity : AppCompatActivity() {
                                         userManager.updateBudget(addedTransaction.amount)
                                     }
                                 }
-                                successNotification(this@ScannerActivity, "Successful scan of the check")
+                                successNotification(
+                                    this@ScannerActivity,
+                                    "Successful scan of the check"
+                                )
                                 val intent = Intent(this@ScannerActivity, MainActivity::class.java)
                                 startActivity(intent)
-                            } else{
-                                errorNotification(this@ScannerActivity, "Error while creating a transaction")
+                            } else {
+                                errorNotification(
+                                    this@ScannerActivity,
+                                    "Error while creating a transaction"
+                                )
                             }
 
                         } else {
@@ -133,7 +144,10 @@ class ScannerActivity : AppCompatActivity() {
                             errorNotification(this@ScannerActivity, response.message())
                         }
                     } catch (e: Exception) {
-                        errorNotification(this@ScannerActivity, "Invalid URL or the check is not fiscalized")
+                        errorNotification(
+                            this@ScannerActivity,
+                            "Invalid URL or the check is not fiscalized"
+                        )
                     } finally {
                         scanningLoading = false
                         scannerLoadingLayout.visibility = View.GONE
@@ -145,7 +159,11 @@ class ScannerActivity : AppCompatActivity() {
         }
         codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
             runOnUiThread {
-                Toast.makeText(this, "Camera initialization error: ${it.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    "Camera initialization error: ${it.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
@@ -159,7 +177,11 @@ class ScannerActivity : AppCompatActivity() {
         isCodeScannerInitialized = true
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == this.requestCode) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

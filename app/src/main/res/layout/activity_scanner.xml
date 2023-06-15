@@ -35,18 +35,23 @@
         android:id="@+id/scanner_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        tools:layout_editor_absoluteY="555dp"
         android:background="@color/background"
+        android:orientation="vertical"
         android:visibility="gone"
-        >
+        tools:layout_editor_absoluteY="555dp">
+
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Please wait, it may take up to a minute"
+            android:layout_height="500dp"
             android:gravity="center"
-            android:textSize="28sp"
             android:paddingHorizontal="40dp"
-            />
+            android:text="Please wait, it may take up to a minute"
+            android:textSize="28sp" />
+
+        <pl.droidsonroids.gif.GifImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background"
+            android:src="@drawable/qr_scan_loading" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.example.budget_tracker.databinding.FragmentStatisticsBinding
 import com.example.budget_tracker.ui.statistics.tabs.MonthTabFragment
@@ -17,6 +16,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 class StatisticsFragment : Fragment() {
 
     private var _binding: FragmentStatisticsBinding? = null
+
     private val binding get() = _binding!!
 
     private lateinit var tabLayout: TabLayout
@@ -27,8 +27,6 @@ class StatisticsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val statisticsViewModel = ViewModelProvider(this).get(StatisticsViewModel::class.java)
-
         _binding = FragmentStatisticsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
@@ -41,6 +39,7 @@ class StatisticsFragment : Fragment() {
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
             tab.text = adapter.getPageTitle(position)
         }.attach()
+
 
         adapter.addFragment(WeekTabFragment(), "Week")
         adapter.addFragment(MonthTabFragment(), "Month")
